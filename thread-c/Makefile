@@ -1,17 +1,25 @@
-TARGETS = 00_one-thread
+TARGET = thread
 
-CORSS_TOOL = 
-CC_CPP = $(CROSS_TOOL)g++
-CC_C = $(CROSS_TOOL)gcc
+CC = gcc
+IDIR = ../include
+DDIR = ../dist
 
-CFLAGS = -Wall -g -std=c99 -Werror -pthread
+CFLAGS = -g -I$(IDIR)
 
-all:clean $(TARGETS)
+DEPS = $(wildcard $(IDIR)/*.h)
+OBJS = $(patsubst %.c, %.o, $(wildcard *.c))
 
-$(TARGETS):
-	$(CC_C) $(CFLAGS) $@.c -o $@
 
-.PHONY: clean
+$(TARGET): $(OBJS)
+	$(CC) -o $(TARGET) $(CFLAGS) $^ -pthread
+
+%.o: %.cpp $(DEPS)
+	$(CC) $(CFLAGS) -c $<
+
+.PHONY: clean dist
 
 clean:
-	rm -f $(TARGETS)
+	$(RM) *.o
+
+dist: $(TARGET) clean
+	mv $(TARGET) $(DDIR)
