@@ -1,0 +1,15 @@
+[Unit]
+Description=updates animes in emission
+
+[Service]
+User=root
+Type=simple
+Restart=always
+RestartSec=3600s
+
+PIDFile=/var/run/php_app_sync.pid
+ExecStart=/bin/sh -c '/usr/bin/php -f /home/shuvi/Desktop/test.php  2>&1 > /var/log/app_sync.log'
+KillMode=process
+
+[Install]
+WantedBy=default.target
